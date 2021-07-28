@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Cores\Mailer\Contract;
+namespace MrzKit\Mailer\Contract;
 
 interface MailSetterContract
 {

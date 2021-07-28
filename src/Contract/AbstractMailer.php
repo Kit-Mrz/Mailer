@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Cores\Mailer\Contract;
+namespace MrzKit\Mailer\Contract;
 
-use App\Cores\Mailer\Mailer;
 use InvalidArgumentException;
+use MrzKit\Mailer\Mailer;
 
 abstract class AbstractMailer implements MailGetterContract, MailSetterContract
 {

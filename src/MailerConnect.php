@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Cores\Mailer;
+namespace MrzKit\Mailer;
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;

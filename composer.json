@@ -1,0 +1,19 @@
+{
+    "name": "mrzkit/mailer",
+    "description": "PHPMailer library",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "zhu shijie",
+            "email": "562591971@qq.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Mrzkit\\Mailer\\": "src/"
+        }
+    }
+}
