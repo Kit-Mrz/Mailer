@@ -1,6 +1,6 @@
 <?php
 
-namespace MrzKit\Mailer;
+namespace Mrzkit\Mailer;
 
 use PHPMailer\PHPMailer\PHPMailer;
 use RuntimeException;
@@ -8,9 +8,21 @@ use RuntimeException;
 class Mailer
 {
     /**
-     * @var MailerConnect
+     * @var MailConnector
+     */
+    protected $mailConnector;
+
+    /**
+     * @var PHPMailer
      */
     protected $mailer;
+
+    public function __construct(MailConnector $mailConnector)
+    {
+        $this->mailConnector = $mailConnector;
+
+        $this->mailer = $this->mailConnector->getMailer();
+    }
 
     /**
      * @desc 邮件实例
@@ -18,11 +30,7 @@ class Mailer
      */
     protected function getMailer() : PHPMailer
     {
-        if (is_null($this->mailer)) {
-            $this->mailer = app(MailerConnect::class);
-        }
-
-        return $this->mailer->getMailer();
+        return $this->mailConnector->getMailer();
     }
 
     /**

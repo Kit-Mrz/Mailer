@@ -1,11 +1,11 @@
 <?php
 
-namespace MrzKit\Mailer;
+namespace Mrzkit\Mailer;
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 
-class MailerConnect
+class MailConnector
 {
     /**
      * @var PHPMailer
@@ -34,9 +34,9 @@ class MailerConnect
 
     public function __construct()
     {
-        $config = config('mail.mailers.smtp');
+        $config = (array) config('mail.mailers.smtp');
 
-        $this->setConfig($config)->createMailer();
+        $this->setConfig($config)->setMailer();
     }
 
     /**
@@ -64,7 +64,7 @@ class MailerConnect
      * @desc 创建邮箱实例
      * @return $this
      */
-    public function createMailer()
+    public function setMailer()
     {
         $config = $this->getConfig();
 
