@@ -2,7 +2,6 @@
 
 namespace Mrzkit\Mailer;
 
-use MrzKit\Mailer\Contract\TranslateSmtpErrorInfo;
 use RuntimeException;
 
 trait Sender
