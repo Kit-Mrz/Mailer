@@ -8,12 +8,10 @@ class Sender
 {
     private static $mailer;
 
+    /**
+     * @var MailTransfer
+     */
     private $mailTransfer;
-
-    public function __construct(MailTransfer $mailTransfer)
-    {
-        $this->mailTransfer = $mailTransfer;
-    }
 
     public static function getMailer() : Mailer
     {
@@ -30,6 +28,17 @@ class Sender
     public function getMailTransfer() : MailTransfer
     {
         return $this->mailTransfer;
+    }
+
+    /**
+     * @param MailTransfer $mailTransfer
+     * @return Sender
+     */
+    public function setMailTransfer(MailTransfer $mailTransfer) : Sender
+    {
+        $this->mailTransfer = $mailTransfer;
+
+        return $this;
     }
 
     public function send()
