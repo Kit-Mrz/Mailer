@@ -1,6 +1,6 @@
 <?php
 
-namespace MrzKit\Mailer\Contract;
+namespace Mrzkit\Mailer;
 
 class TranslateSmtpErrorInfo
 {
