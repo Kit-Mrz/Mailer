@@ -2,26 +2,28 @@
 
 namespace Mrzkit\Mailer;
 
+use Mrzkit\Mailer\Contracts\ConnectorContract;
 use PHPMailer\PHPMailer\PHPMailer;
 use RuntimeException;
 
 class Mailer
 {
     /**
-     * @var MailConnector
+     * @var ConnectorContract
      */
-    protected $mailConnector;
+    private $connector;
+
+    public function __construct(ConnectorContract $connector)
+    {
+        $this->connector = $connector;
+    }
 
     /**
-     * @var PHPMailer
+     * @return ConnectorContract
      */
-    protected $mailer;
-
-    public function __construct(MailConnector $mailConnector)
+    public function getConnector() : ConnectorContract
     {
-        $this->mailConnector = $mailConnector;
-
-        $this->mailer = $this->mailConnector->getMailer();
+        return $this->connector;
     }
 
     /**
@@ -30,7 +32,7 @@ class Mailer
      */
     protected function getMailer() : PHPMailer
     {
-        return $this->mailConnector->getMailer();
+        return $this->getConnector()->getMailer();
     }
 
     /**
@@ -43,7 +45,8 @@ class Mailer
     public function setFrom(string $address, string $name = '') : bool
     {
         if ( !$this->getMailer()->setFrom($address, $name)) {
-            throw new RuntimeException($this->getMailer()->ErrorInfo);
+            $msg = "setFrom fail. ErrorInfo:" . $this->getMailer()->ErrorInfo;
+            throw new RuntimeException($msg);
         }
 
         return true;
@@ -59,7 +62,8 @@ class Mailer
     {
         foreach ($recipients as $recipient) {
             if ( !$this->getMailer()->addAddress($recipient['address'], $recipient['name'])) {
-                throw new RuntimeException($this->getMailer()->ErrorInfo);
+                $msg = "addRecipients fail. ErrorInfo:" . $this->getMailer()->ErrorInfo;
+                throw new RuntimeException($msg);
             }
         }
 
@@ -76,7 +80,8 @@ class Mailer
     public function addReplyTo(string $address, string $name = '') : bool
     {
         if ( !$this->getMailer()->addReplyTo($address, $name)) {
-            throw new RuntimeException($this->getMailer()->ErrorInfo);
+            $msg = "addReplyTo fail. ErrorInfo:" . $this->getMailer()->ErrorInfo;
+            throw new RuntimeException($msg);
         }
 
         return true;
@@ -92,7 +97,8 @@ class Mailer
     {
         foreach ($recipients as $recipient) {
             if ( !$this->getMailer()->addCC($recipient['address'], $recipient['name'])) {
-                throw new RuntimeException($this->getMailer()->ErrorInfo);
+                $msg = "addCC fail. ErrorInfo:" . $this->getMailer()->ErrorInfo;
+                throw new RuntimeException($msg);
             }
         }
 
@@ -109,7 +115,8 @@ class Mailer
     {
         foreach ($recipients as $recipient) {
             if ( !$this->getMailer()->addBCC($recipient['address'], $recipient['name'])) {
-                throw new RuntimeException($this->getMailer()->ErrorInfo);
+                $msg = "addBCC fail. ErrorInfo:" . $this->getMailer()->ErrorInfo;
+                throw new RuntimeException($msg);
             }
         }
 
@@ -171,7 +178,8 @@ class Mailer
             }
 
             if ( !$this->getMailer()->addAttachment($attachment['path'], $attachment['name'] ?? '', $attachment['encoding'] ?? 'base64', $attachment['type'] ?? '')) {
-                throw new RuntimeException($this->getMailer()->ErrorInfo);
+                $msg = "addAttachments fail. ErrorInfo:" . $this->getMailer()->ErrorInfo;
+                throw new RuntimeException($msg);
             }
         }
 

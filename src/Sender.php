@@ -4,43 +4,73 @@ namespace Mrzkit\Mailer;
 
 use RuntimeException;
 
-trait Sender
+class Sender
 {
+    private static $mailer;
+
+    private $mailTransfer;
+
+    public function __construct(MailTransfer $mailTransfer)
+    {
+        $this->mailTransfer = $mailTransfer;
+    }
+
+    public static function getMailer() : Mailer
+    {
+        if (is_null(static::$mailer)) {
+            static::$mailer = new Mailer(new MailConnector());
+        }
+
+        return static::$mailer;
+    }
+
+    /**
+     * @return MailTransfer
+     */
+    public function getMailTransfer() : MailTransfer
+    {
+        return $this->mailTransfer;
+    }
+
     public function send()
     {
         try {
-            $mailer = new Mailer(new MailConnector());
+            $mailTransfer = $this->getMailTransfer();
 
-            $from = $this->getFrom();
+            $mailer = static::getMailer();
+
+            $from = $mailTransfer->getFrom();
             $mailer->setFrom($from['address'], $from['name']);
 
-            $recipients = $this->getRecipients();
+            $recipients = $mailTransfer->getRecipients();
             $mailer->addRecipients($recipients);
 
-            $replyTo = $this->getReplyTo();
+            $replyTo = $mailTransfer->getReplyTo();
             $mailer->addReplyTo($replyTo['address'], $replyTo['name']);
 
-            $cc = $this->getCC();
+            $cc = $mailTransfer->getCC();
             $mailer->addCC($cc);
 
-            $bcc = $this->getBCC();
+            $bcc = $mailTransfer->getBCC();
             $mailer->addBCC($bcc);
 
-            $subject = $this->getSubject();
+            $subject = $mailTransfer->getSubject();
             $mailer->setSubject($subject);
 
-            $body = $this->getBody();
+            $body = $mailTransfer->getBody();
             $mailer->setBody($body);
 
-            $attachments = $this->getAttachments();
+            $attachments = $mailTransfer->getAttachments();
             $mailer->addAttachments($attachments);
 
-            $isHtml = $this->isHtml();
+            $isHtml = $mailTransfer->isHtml();
             $mailer->isHTML($isHtml);
 
             return $mailer->send();
         } catch (RuntimeException $e) {
-            $info = TranslateSmtpErrorInfo::translateErrorInfo($e->getMessage());
+            $translateSmtpErrorInfo = new TranslateSmtpErrorInfo($e->getMessage());
+
+            $info = $translateSmtpErrorInfo->translateErrorInfo();
 
             throw new SenderException($info);
         }

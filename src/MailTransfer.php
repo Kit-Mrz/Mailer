@@ -4,8 +4,6 @@ namespace Mrzkit\Mailer;
 
 class MailTransfer
 {
-    use Sender;
-
     /**
      * @var array 发送人 ['address' = '', 'name' => '']
      */

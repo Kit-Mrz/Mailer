@@ -4,31 +4,50 @@ namespace Mrzkit\Mailer;
 
 class TranslateSmtpErrorInfo
 {
+    /**
+     * @var string 错误消息
+     */
+    private $errorInfo;
+
+    public function __construct(string $errorInfo)
+    {
+        $this->errorInfo = $errorInfo;
+    }
+
+    /**
+     * @return string
+     */
+    public function getErrorInfo() : string
+    {
+        return $this->errorInfo;
+    }
 
     /**
      * @desc 匹配邮箱
-     * @param string $errorInfo
      * @return string
      */
-    public static function matchEmail($errorInfo = '') : string
+    public function matchEmail() : string
     {
-        preg_match_all("/\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b/", $errorInfo, $match);
+        preg_match_all("/\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b/", $this->getErrorInfo(), $match);
+
+        if ( !isset($match[0])) return '';
 
         if (empty($match[0])) return '';
 
         //去重
         $match = array_flip(array_flip($match[0]));
 
-        return implode(",", $match) . ':';
+        return join(",", $match) . ":";
     }
 
     /**
      * @desc 翻译错误信息
-     * @param $errorInfo
      * @return string
      */
-    public static function translateErrorInfo($errorInfo) : string
+    public function translateErrorInfo() : string
     {
+        $errorInfo = $this->getErrorInfo();
+
         if (empty($errorInfo)) return '';
 
         $email = self::matchEmail($errorInfo);

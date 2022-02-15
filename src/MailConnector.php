@@ -2,10 +2,11 @@
 
 namespace Mrzkit\Mailer;
 
+use Mrzkit\Mailer\Contracts\ConnectorContract;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 
-class MailConnector
+class MailConnector implements ConnectorContract
 {
     /**
      * @var PHPMailer
