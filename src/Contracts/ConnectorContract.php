@@ -6,7 +6,15 @@ use PHPMailer\PHPMailer\PHPMailer;
 
 interface ConnectorContract
 {
+    /**
+     * @desc 获取配置
+     * @return array
+     */
     public function getConfig() : array;
 
-    public function getMailer() : PHPMailer;
+    /**
+     * @desc 获取邮件实例
+     * @return PHPMailer
+     */
+    public function phpMailer() : PHPMailer;
 }

@@ -9,30 +9,22 @@ use RuntimeException;
 class Mailer
 {
     /**
-     * @var ConnectorContract
+     * @var PHPMailer
      */
-    private $connector;
+    private $phpMailer;
 
     public function __construct(ConnectorContract $connector)
     {
-        $this->connector = $connector;
-    }
-
-    /**
-     * @return ConnectorContract
-     */
-    public function getConnector() : ConnectorContract
-    {
-        return $this->connector;
+        $this->phpMailer = $connector->phpMailer();
     }
 
     /**
      * @desc 邮件实例
      * @return PHPMailer
      */
-    protected function getMailer() : PHPMailer
+    private function phpMailer() : PHPMailer
     {
-        return $this->getConnector()->getMailer();
+        return $this->phpMailer;
     }
 
     /**
@@ -44,8 +36,8 @@ class Mailer
      */
     public function setFrom(string $address, string $name = '') : bool
     {
-        if ( !$this->getMailer()->setFrom($address, $name)) {
-            $msg = "setFrom fail. ErrorInfo:" . $this->getMailer()->ErrorInfo;
+        if ( !$this->phpMailer()->setFrom($address, $name)) {
+            $msg = "setFrom fail. ErrorInfo:" . $this->phpMailer()->ErrorInfo;
             throw new RuntimeException($msg);
         }
 
@@ -61,8 +53,8 @@ class Mailer
     public function addRecipients(array $recipients) : bool
     {
         foreach ($recipients as $recipient) {
-            if ( !$this->getMailer()->addAddress($recipient['address'], $recipient['name'])) {
-                $msg = "addRecipients fail. ErrorInfo:" . $this->getMailer()->ErrorInfo;
+            if ( !$this->phpMailer()->addAddress($recipient['address'], $recipient['name'])) {
+                $msg = "addRecipients fail. ErrorInfo:" . $this->phpMailer()->ErrorInfo;
                 throw new RuntimeException($msg);
             }
         }
@@ -79,8 +71,8 @@ class Mailer
      */
     public function addReplyTo(string $address, string $name = '') : bool
     {
-        if ( !$this->getMailer()->addReplyTo($address, $name)) {
-            $msg = "addReplyTo fail. ErrorInfo:" . $this->getMailer()->ErrorInfo;
+        if ( !$this->phpMailer()->addReplyTo($address, $name)) {
+            $msg = "addReplyTo fail. ErrorInfo:" . $this->phpMailer()->ErrorInfo;
             throw new RuntimeException($msg);
         }
 
@@ -96,8 +88,8 @@ class Mailer
     public function addCC(array $recipients) : bool
     {
         foreach ($recipients as $recipient) {
-            if ( !$this->getMailer()->addCC($recipient['address'], $recipient['name'])) {
-                $msg = "addCC fail. ErrorInfo:" . $this->getMailer()->ErrorInfo;
+            if ( !$this->phpMailer()->addCC($recipient['address'], $recipient['name'])) {
+                $msg = "addCC fail. ErrorInfo:" . $this->phpMailer()->ErrorInfo;
                 throw new RuntimeException($msg);
             }
         }
@@ -114,8 +106,8 @@ class Mailer
     public function addBCC(array $recipients) : bool
     {
         foreach ($recipients as $recipient) {
-            if ( !$this->getMailer()->addBCC($recipient['address'], $recipient['name'])) {
-                $msg = "addBCC fail. ErrorInfo:" . $this->getMailer()->ErrorInfo;
+            if ( !$this->phpMailer()->addBCC($recipient['address'], $recipient['name'])) {
+                $msg = "addBCC fail. ErrorInfo:" . $this->phpMailer()->ErrorInfo;
                 throw new RuntimeException($msg);
             }
         }
@@ -129,7 +121,7 @@ class Mailer
      */
     public function isHTML($isHtml = true)
     {
-        $this->getMailer()->isHTML($isHtml);
+        $this->phpMailer()->isHTML($isHtml);
     }
 
     /**
@@ -143,7 +135,7 @@ class Mailer
             throw new RuntimeException('Subject Empty.');
         }
 
-        $this->getMailer()->Subject = $subject;
+        $this->phpMailer()->Subject = $subject;
 
         return true;
     }
@@ -159,7 +151,7 @@ class Mailer
             throw new RuntimeException('Body Empty.');
         }
 
-        $this->getMailer()->Body = $body;
+        $this->phpMailer()->Body = $body;
 
         return true;
     }
@@ -177,8 +169,8 @@ class Mailer
                 throw new RuntimeException('Invalid argument path. File Not Exists.');
             }
 
-            if ( !$this->getMailer()->addAttachment($attachment['path'], $attachment['name'] ?? '', $attachment['encoding'] ?? 'base64', $attachment['type'] ?? '')) {
-                $msg = "addAttachments fail. ErrorInfo:" . $this->getMailer()->ErrorInfo;
+            if ( !$this->phpMailer()->addAttachment($attachment['path'], $attachment['name'] ?? '', $attachment['encoding'] ?? 'base64', $attachment['type'] ?? '')) {
+                $msg = "addAttachments fail. ErrorInfo:" . $this->phpMailer()->ErrorInfo;
                 throw new RuntimeException($msg);
             }
         }
@@ -191,8 +183,8 @@ class Mailer
      * @return bool
      * @throws \PHPMailer\PHPMailer\Exception
      */
-    public function send()
+    public function send() : bool
     {
-        return $this->getMailer()->send();
+        return $this->phpMailer()->send();
     }
 }

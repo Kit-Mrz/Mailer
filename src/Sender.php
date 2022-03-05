@@ -2,19 +2,34 @@
 
 namespace Mrzkit\Mailer;
 
+use Mrzkit\Mailer\Contracts\MailTransferContract;
+use Mrzkit\Mailer\Contracts\SenderContract;
 use RuntimeException;
 
-class Sender
+class Sender implements SenderContract
 {
-    private static $mailer;
+    /** @var MailTransferContract */
+    private $mailTransferContract;
+
+    /** @var Mailer */
+    protected static $mailer;
+
+    public function __construct(MailTransferContract $mailTransferContract)
+    {
+        $this->mailTransferContract = $mailTransferContract;
+    }
 
     /**
-     * @var MailTransfer
+     * @desc Mailer
+     * @param bool $force
+     * @return Mailer
      */
-    private $mailTransfer;
-
-    public static function getMailer() : Mailer
+    public static function mailer(bool $force = false) : Mailer
     {
+        if ($force) {
+            static::$mailer = new Mailer(new MailConnector());
+        }
+
         if (is_null(static::$mailer)) {
             static::$mailer = new Mailer(new MailConnector());
         }
@@ -23,30 +38,24 @@ class Sender
     }
 
     /**
-     * @return MailTransfer
+     * @return MailTransferContract
      */
-    public function getMailTransfer() : MailTransfer
+    private function getMailTransferContract() : MailTransferContract
     {
-        return $this->mailTransfer;
+        return $this->mailTransferContract;
     }
 
     /**
-     * @param MailTransfer $mailTransfer
-     * @return Sender
+     * @desc 发送
+     * @return bool
+     * @throws SenderException
+     * @throws \PHPMailer\PHPMailer\Exception
      */
-    public function setMailTransfer(MailTransfer $mailTransfer) : Sender
-    {
-        $this->mailTransfer = $mailTransfer;
-
-        return $this;
-    }
-
-    public function send()
+    public function send() : bool
     {
         try {
-            $mailTransfer = $this->getMailTransfer();
-
-            $mailer = static::getMailer();
+            $mailTransfer = $this->getMailTransferContract();
+            $mailer       = $this->mailer();
 
             $from = $mailTransfer->getFrom();
             $mailer->setFrom($from['address'], $from['name']);
@@ -76,7 +85,9 @@ class Sender
             $mailer->isHTML($isHtml);
 
             return $mailer->send();
+            //
         } catch (RuntimeException $e) {
+            //
             $translateSmtpErrorInfo = new TranslateSmtpErrorInfo($e->getMessage());
 
             $info = $translateSmtpErrorInfo->translateErrorInfo();

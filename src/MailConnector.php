@@ -11,7 +11,7 @@ class MailConnector implements ConnectorContract
     /**
      * @var PHPMailer
      */
-    protected $mailer;
+    protected $phpMailer;
 
     /**
      * @var array
@@ -25,17 +25,18 @@ class MailConnector implements ConnectorContract
         'SMTPAutoTLS' => false,  // Disable Auto TLS authentication
         'CharSet'     => PHPMailer::CHARSET_UTF8,
 
-        'host'       => '', // Specify main and backup SMTP servers
-        'username'   => '', // SMTP username
-        'password'   => '',  // SMTP password
-        'port'       => 465, // TCP port to connect to
-        'timeout'    => 20, // 超时设为20秒
+        'host'     => '', // Specify main and backup SMTP servers
+        'port'     => 465, // TCP port to connect to
+        'username' => '', // SMTP username
+        'password' => '',  // SMTP password
+        'timeout'  => 20, // 超时设为20秒
+
         'exceptions' => true, //Create an instance; passing `true` enables exceptions
     ];
 
-    public function __construct()
+    public function __construct(array $config = [])
     {
-        $config = (array) config('mail.mailers.smtp');
+        $config = empty($config) ? (array) config('mail.mailers.smtp') : $config;
 
         $this->setConfig($config)->setMailer();
     }
@@ -54,9 +55,15 @@ class MailConnector implements ConnectorContract
      * @param array $config
      * @return $this
      */
-    public function setConfig(array $config)
+    private function setConfig(array $config)
     {
-        $this->config = array_merge($this->config, $config);
+        $this->config['debug']      = (bool) $config['debug'];
+        $this->config['host']       = (string) $config['host'];
+        $this->config['port']       = (int) $config['port'];
+        $this->config['username']   = (string) $config['username'];
+        $this->config['password']   = (string) $config['password'];
+        $this->config['timeout']    = (int) $config['timeout'];
+        $this->config['encryption'] = (bool) $config['encryption'];
 
         return $this;
     }
@@ -84,7 +91,7 @@ class MailConnector implements ConnectorContract
         $mail->Timeout     = $config['timeout'];
         $mail->CharSet     = $config['CharSet'];
 
-        $this->mailer = $mail;
+        $this->phpMailer = $mail;
 
         return $this;
     }
@@ -93,8 +100,8 @@ class MailConnector implements ConnectorContract
      * @desc 获取邮箱实例
      * @return PHPMailer
      */
-    public function getMailer() : PHPMailer
+    public function phpMailer() : PHPMailer
     {
-        return $this->mailer;
+        return $this->phpMailer;
     }
 }
