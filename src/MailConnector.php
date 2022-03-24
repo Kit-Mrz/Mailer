@@ -18,12 +18,13 @@ class MailConnector implements ConnectorContract
      */
     protected $config = [
         // 便于开启调试信息
-        'debug'       => false,
-        'isSMTP'      => true, //Send using SMTP
-        'SMTPAuth'    => true, //Enable SMTP authentication
-        'SMTPSecure'  => PHPMailer::ENCRYPTION_SMTPS,
-        'SMTPAutoTLS' => false,  // Disable Auto TLS authentication
-        'CharSet'     => PHPMailer::CHARSET_UTF8,
+        'debug'         => false,
+        'isSMTP'        => true, //Send using SMTP
+        'SMTPAuth'      => true, //Enable SMTP authentication
+        'SMTPSecure'    => PHPMailer::ENCRYPTION_SMTPS,
+        'SMTPAutoTLS'   => false,  // Disable Auto TLS authentication
+        'CharSet'       => PHPMailer::CHARSET_UTF8,
+        'SMTPKeepAlive' => true,
 
         'host'     => '', // Specify main and backup SMTP servers
         'port'     => 465, // TCP port to connect to
@@ -57,13 +58,14 @@ class MailConnector implements ConnectorContract
      */
     private function setConfig(array $config)
     {
-        $this->config['debug']      = (bool) $config['debug'];
-        $this->config['host']       = (string) $config['host'];
-        $this->config['port']       = (int) $config['port'];
-        $this->config['username']   = (string) $config['username'];
-        $this->config['password']   = (string) $config['password'];
-        $this->config['timeout']    = (int) $config['timeout'];
-        $this->config['encryption'] = (bool) $config['encryption'];
+        $this->config['debug']         = (bool) $config['debug'];
+        $this->config['host']          = (string) $config['host'];
+        $this->config['port']          = (int) $config['port'];
+        $this->config['username']      = (string) $config['username'];
+        $this->config['password']      = (string) $config['password'];
+        $this->config['timeout']       = (int) $config['timeout'];
+        $this->config['encryption']    = (bool) $config['encryption'];
+        $this->config['SMTPKeepAlive'] = (bool) $config['SMTPKeepAlive'];
 
         return $this;
     }
@@ -80,16 +82,17 @@ class MailConnector implements ConnectorContract
 
         //Server settings
         $config['isSMTP'] ? $mail->isSMTP() : $mail->isMail();
-        $mail->SMTPDebug   = $config['debug'] ? SMTP::DEBUG_LOWLEVEL : SMTP::DEBUG_OFF;
-        $mail->SMTPAuth    = $config['SMTPAuth'];
-        $mail->SMTPSecure  = $config['SMTPSecure'];
-        $mail->SMTPAutoTLS = $config['SMTPAutoTLS'];
-        $mail->Host        = $config['host'];
-        $mail->Username    = $config['username'];
-        $mail->Password    = $config['password'];
-        $mail->Port        = $config['port'];
-        $mail->Timeout     = $config['timeout'];
-        $mail->CharSet     = $config['CharSet'];
+        $mail->SMTPDebug     = $config['debug'] ? SMTP::DEBUG_LOWLEVEL : SMTP::DEBUG_OFF;
+        $mail->SMTPAuth      = $config['SMTPAuth'];
+        $mail->SMTPSecure    = $config['SMTPSecure'];
+        $mail->SMTPAutoTLS   = $config['SMTPAutoTLS'];
+        $mail->SMTPKeepAlive = $config['SMTPKeepAlive'] ?? true;
+        $mail->Host          = $config['host'];
+        $mail->Username      = $config['username'];
+        $mail->Password      = $config['password'];
+        $mail->Port          = $config['port'];
+        $mail->Timeout       = $config['timeout'];
+        $mail->CharSet       = $config['CharSet'];
 
         $this->phpMailer = $mail;
 
