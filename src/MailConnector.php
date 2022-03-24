@@ -65,7 +65,7 @@ class MailConnector implements ConnectorContract
         $this->config['password']      = (string) $config['password'];
         $this->config['timeout']       = (int) $config['timeout'];
         $this->config['encryption']    = (bool) $config['encryption'];
-        $this->config['SMTPKeepAlive'] = (bool) $config['SMTPKeepAlive'];
+        $this->config['SMTPKeepAlive'] = (bool) ($config['SMTPKeepAlive'] ?? true);
 
         return $this;
     }
