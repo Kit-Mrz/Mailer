@@ -5,7 +5,7 @@ namespace Mrzkit\Mailer;
 class TranslateSmtpErrorInfo
 {
     /**
-     * @var string 错误消息
+     * @var string
      */
     private $errorInfo;
 
