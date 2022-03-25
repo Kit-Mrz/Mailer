@@ -24,15 +24,9 @@ class Sender implements SenderContract
      * @param bool $force
      * @return Mailer
      */
-    public static function mailer(bool $force = false) : Mailer
+    public function mailer() : Mailer
     {
-        if ($force) {
-            static::$mailer = new Mailer(new MailConnector());
-        }
-
-        if (is_null(static::$mailer)) {
-            static::$mailer = new Mailer(new MailConnector());
-        }
+        static::$mailer = new Mailer(new MailConnector());
 
         return static::$mailer;
     }
