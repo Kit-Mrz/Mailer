@@ -4,7 +4,7 @@ namespace Mrzkit\Mailer;
 
 use Mrzkit\Mailer\Contracts\MailTransferContract;
 use Mrzkit\Mailer\Contracts\SenderContract;
-use RuntimeException;
+use Exception;
 
 class Sender implements SenderContract
 {
@@ -80,7 +80,7 @@ class Sender implements SenderContract
 
             return $mailer->send();
             //
-        } catch (RuntimeException $e) {
+        } catch (Exception $e) {
             //
             $translateSmtpErrorInfo = new TranslateSmtpErrorInfo($e->getMessage());
 
