@@ -306,6 +306,10 @@ class TranslateSmtpErrorInfo
             return $email . '您要发送的收件人不存在。';
         }
 
+        if (strpos($errorInfo, 'Mailbox not found or access denied') !== false) {
+            return $email . '您要发送的收件人不存在或者禁止向该收件人发信';
+        }
+
         if (strpos($errorInfo, 'Connection denied') !== false) {
             return $email . '该服务器IP的发信频率大幅度超过QQ邮箱限制。';
         }
