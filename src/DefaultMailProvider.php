@@ -9,6 +9,6 @@ class DefaultMailProvider implements MailProvider
 {
     public function getMailer() : Mailer
     {
-        return new Mailer(new MailConnector());
+        return new Mailer(new MailConnector(config('mail.mailers.smtp')));
     }
 }

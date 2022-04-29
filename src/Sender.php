@@ -2,6 +2,7 @@
 
 namespace Mrzkit\Mailer;
 
+use Mrzkit\Mailer\Contracts\MailProvider;
 use Mrzkit\Mailer\Contracts\MailTransferContract;
 use Mrzkit\Mailer\Contracts\OfferMailerContract;
 use Mrzkit\Mailer\Contracts\SenderContract;
@@ -12,14 +13,14 @@ class Sender implements SenderContract
     /** @var MailTransferContract */
     private $mailTransferContract;
 
-    /** @var OfferMailerContract OfferMailerContract */
-    private $offerMailerContract;
+    /** @var MailProvider */
+    private $mailProvider;
 
-    public function __construct(MailTransferContract $mailTransferContract, OfferMailerContract $offerMailerContract)
+    public function __construct(MailTransferContract $mailTransferContract, MailProvider $mailProvider)
     {
         $this->mailTransferContract = $mailTransferContract;
 
-        $this->offerMailerContract = $offerMailerContract;
+        $this->mailProvider = $mailProvider;
     }
 
     /**
@@ -31,11 +32,11 @@ class Sender implements SenderContract
     }
 
     /**
-     * @return OfferMailerContract
+     * @return MailProvider
      */
-    public function getOfferMailerContract() : OfferMailerContract
+    public function getMailProvider() : MailProvider
     {
-        return $this->offerMailerContract;
+        return $this->mailProvider;
     }
 
     /**

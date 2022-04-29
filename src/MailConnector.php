@@ -20,8 +20,6 @@ class MailConnector implements ConnectorContract
 
     public function __construct(array $config = [])
     {
-        $config = empty($config) ? (array) config('mail.mailers.smtp') : $config;
-
         $this->setConfig($config)->setMailer();
     }
 
@@ -73,7 +71,6 @@ class MailConnector implements ConnectorContract
 
         $mail = new PHPMailer($config['exceptions']);
 
-        //Server settings
         $mail->SMTPDebug     = $config['debug'] ? SMTP::DEBUG_LOWLEVEL : SMTP::DEBUG_OFF;
         $mail->SMTPAuth      = $config['SMTPAuth'];
         $mail->SMTPSecure    = $config['SMTPSecure'];
