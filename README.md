@@ -5,9 +5,11 @@
 ````PHP
 use Mrzkit\Mailer\MailTransfer;
 use Mrzkit\Mailer\Sender;
-use Mrzkit\Mailer\Contracts\DefaultMailProvider;
+use Mrzkit\Mailer\MailProvider;
+use Mrzkit\Mailer\DefaultMailConfig;
 
     $mailTransfer = new MailTransfer();
+    
     $mailTransfer->setFrom($params['from'])
         ->setRecipients($params['recipients'])
         ->setReplyTo($params['replyTo'] ?? $params['from'])
@@ -17,7 +19,9 @@ use Mrzkit\Mailer\Contracts\DefaultMailProvider;
         ->setBody()
         ->setAttachments($params['attachments'] ?? []);
         
-    $defaultMailProvider = new DefaultMailProvider();
+    $defaultMailConfig = new DefaultMailConfig();
+
+    $defaultMailProvider = new MailProvider($defaultMailConfig);
 
     $sender = new Sender($mailTransfer, $defaultMailProvider);
     
