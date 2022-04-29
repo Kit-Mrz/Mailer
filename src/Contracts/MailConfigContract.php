@@ -75,4 +75,10 @@ interface MailConfigContract
      * @return string
      */
     public function getCharSet() : string;
+
+    /**
+     * @desc is smtp
+     * @return bool
+     */
+    public function isSmtp() : bool;
 }

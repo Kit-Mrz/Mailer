@@ -3,6 +3,7 @@
 namespace Mrzkit\Mailer;
 
 use Mrzkit\Mailer\Contracts\MailConfigContract;
+use PHPMailer\PHPMailer\PHPMailer;
 
 class DefaultMailConfig implements MailConfigContract
 {
@@ -15,7 +16,7 @@ class DefaultMailConfig implements MailConfigContract
 
     public function getDebug() : bool
     {
-        return $this->config['debug'];
+        return $this->config['debug'] ?? true;
     }
 
     public function getHost() : string
@@ -40,36 +41,41 @@ class DefaultMailConfig implements MailConfigContract
 
     public function getTimeout() : int
     {
-        return $this->config['timeout'];
+        return $this->config['timeout'] ?? 600;
     }
 
     public function getExceptions() : bool
     {
-        return $this->config['exceptions'];
+        return $this->config['exceptions'] ?? true;
     }
 
     public function getSMTPAuth() : bool
     {
-        return $this->config['SMTPAuth'];
+        return $this->config['SMTPAuth'] ?? ($this->config['encryption'] ?? true);
     }
 
     public function getSMTPSecure() : string
     {
-        return $this->config['SMTPSecure'];
+        return $this->config['SMTPSecure'] ?? PHPMailer::ENCRYPTION_SMTPS;
     }
 
     public function getSMTPAutoTLS() : bool
     {
-        return $this->config['SMTPAutoTLS'];
+        return $this->config['SMTPAutoTLS'] ?? false;
     }
 
     public function getSMTPKeepAlive() : bool
     {
-        return $this->config['SMTPAutoTLS'];
+        return $this->config['SMTPAutoTLS'] ?? true;
     }
 
     public function getCharSet() : string
     {
-        return $this->config['CharSet'];
+        return $this->config['charSet'] ?? PHPMailer::CHARSET_UTF8;
+    }
+
+    public function isSmtp() : bool
+    {
+        return $this->config['isSmtp'] ?? true;
     }
 }

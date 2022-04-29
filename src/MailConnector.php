@@ -40,27 +40,11 @@ class MailConnector implements ConnectorContract
      */
     public function setMailer()
     {
-        /*
-        $config = [
-            // 便于开启调试信息
-            'debug'         => (bool) ($config['debug'] ?? false),
-            'exceptions'    => (bool) ($config['exceptions'] ?? true), //Create an instance; passing `true` enables exceptions
-            'SMTPAuth'      => (bool) ($config['SMTPAuth'] ?? true), //Enable SMTP authentication
-            'SMTPSecure'    => (string) ($config['SMTPSecure'] ?? PHPMailer::ENCRYPTION_SMTPS),
-            'SMTPAutoTLS'   => (bool) ($config['SMTPAutoTLS'] ?? false),  // Disable Auto TLS authentication
-            'SMTPKeepAlive' => (bool) ($config['SMTPKeepAlive'] ?? true),
-            'CharSet'       => (string) ($config['CharSet'] ?? PHPMailer::CHARSET_UTF8),
-
-            'host'     => (string) ($config['host'] ?? ""), // Specify main and backup SMTP servers
-            'port'     => (int) ($config['port'] ?? 465), // TCP port to connect to
-            'username' => (string) ($config['username'] ?? ""), // SMTP username
-            'password' => (string) ($config['password'] ?? ""),  // SMTP password
-            'timeout'  => (string) ($config['timeout'] ?? 20), // 超时设为20秒
-        ];
-         */
         $mailConfigContract = $this->getMailConfigContract();
 
         $mail = new PHPMailer($mailConfigContract->getExceptions());
+
+        $mailConfigContract->isSmtp() ? $mail->isSMTP() : $mail->isHTML();
 
         $mail->SMTPDebug     = $mailConfigContract->getDebug() ? SMTP::DEBUG_LOWLEVEL : SMTP::DEBUG_OFF;
         $mail->SMTPAuth      = $mailConfigContract->getSMTPAuth();
