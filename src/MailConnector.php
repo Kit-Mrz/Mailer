@@ -3,6 +3,7 @@
 namespace Mrzkit\Mailer;
 
 use Mrzkit\Mailer\Contracts\ConnectorContract;
+use Mrzkit\Mailer\Contracts\MailConfigContract;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 
@@ -14,31 +15,32 @@ class MailConnector implements ConnectorContract
     protected $phpMailer;
 
     /**
-     * @var array
+     * @var MailConfigContract
      */
-    protected $config = [];
+    protected $mailConfigContract;
 
-    public function __construct(array $config = [])
+    public function __construct(MailConfigContract $mailConfigContract)
     {
-        $this->setConfig($config)->setMailer();
+        $this->mailConfigContract = $mailConfigContract;
+
+        $this->setMailer();
     }
 
     /**
-     * @desc 获取配置
-     * @return array
+     * @return MailConfigContract
      */
-    public function getConfig() : array
+    public function getMailConfigContract() : MailConfigContract
     {
-        return $this->config;
+        return $this->mailConfigContract;
     }
 
     /**
-     * @desc 设置配置
-     * @param array $config
+     * @desc 创建邮箱实例
      * @return $this
      */
-    private function setConfig(array $config)
+    public function setMailer()
     {
+        /*
         $config = [
             // 便于开启调试信息
             'debug'         => (bool) ($config['debug'] ?? false),
@@ -55,33 +57,22 @@ class MailConnector implements ConnectorContract
             'password' => (string) ($config['password'] ?? ""),  // SMTP password
             'timeout'  => (string) ($config['timeout'] ?? 20), // 超时设为20秒
         ];
+         */
+        $mailConfigContract = $this->getMailConfigContract();
 
-        $this->config = $config;
+        $mail = new PHPMailer($mailConfigContract->getExceptions());
 
-        return $this;
-    }
-
-    /**
-     * @desc 创建邮箱实例
-     * @return $this
-     */
-    public function setMailer()
-    {
-        $config = $this->getConfig();
-
-        $mail = new PHPMailer($config['exceptions']);
-
-        $mail->SMTPDebug     = $config['debug'] ? SMTP::DEBUG_LOWLEVEL : SMTP::DEBUG_OFF;
-        $mail->SMTPAuth      = $config['SMTPAuth'];
-        $mail->SMTPSecure    = $config['SMTPSecure'];
-        $mail->SMTPAutoTLS   = $config['SMTPAutoTLS'];
-        $mail->SMTPKeepAlive = $config['SMTPKeepAlive'] ?? true;
-        $mail->CharSet       = $config['CharSet'];
-        $mail->Host          = $config['host'];
-        $mail->Port          = $config['port'];
-        $mail->Username      = $config['username'];
-        $mail->Password      = $config['password'];
-        $mail->Timeout       = $config['timeout'];
+        $mail->SMTPDebug     = $mailConfigContract->getDebug() ? SMTP::DEBUG_LOWLEVEL : SMTP::DEBUG_OFF;
+        $mail->SMTPAuth      = $mailConfigContract->getSMTPAuth();
+        $mail->SMTPSecure    = $mailConfigContract->getSMTPSecure();
+        $mail->SMTPAutoTLS   = $mailConfigContract->getSMTPAutoTLS();
+        $mail->SMTPKeepAlive = $mailConfigContract->getSMTPKeepAlive();
+        $mail->CharSet       = $mailConfigContract->getCharSet();
+        $mail->Host          = $mailConfigContract->getHost();
+        $mail->Port          = $mailConfigContract->getPort();
+        $mail->Username      = $mailConfigContract->getUsername();
+        $mail->Password      = $mailConfigContract->getPassword();
+        $mail->Timeout       = $mailConfigContract->getTimeout();
 
         $this->phpMailer = $mail;
 

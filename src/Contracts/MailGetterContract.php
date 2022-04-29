@@ -2,7 +2,7 @@
 
 namespace Mrzkit\Mailer\Contracts;
 
-interface MailGetter
+interface MailGetterContract
 {
     /**
      * @return array

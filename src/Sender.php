@@ -2,41 +2,40 @@
 
 namespace Mrzkit\Mailer;
 
-use Mrzkit\Mailer\Contracts\MailProvider;
-use Mrzkit\Mailer\Contracts\MailTransferContract;
-use Mrzkit\Mailer\Contracts\OfferMailerContract;
+use Mrzkit\Mailer\Contracts\MailProviderContract;
+use Mrzkit\Mailer\Contracts\MailTransferContractContractContract;
 use Mrzkit\Mailer\Contracts\SenderContract;
 use Exception;
 
 class Sender implements SenderContract
 {
-    /** @var MailTransferContract */
+    /** @var MailTransferContractContractContract */
     private $mailTransferContract;
 
-    /** @var MailProvider */
-    private $mailProvider;
+    /** @var MailProviderContract */
+    private $mailProviderContract;
 
-    public function __construct(MailTransferContract $mailTransferContract, MailProvider $mailProvider)
+    public function __construct(MailTransferContractContractContract $mailTransferContract, MailProviderContract $mailProviderContract)
     {
         $this->mailTransferContract = $mailTransferContract;
 
-        $this->mailProvider = $mailProvider;
+        $this->mailProviderContract = $mailProviderContract;
     }
 
     /**
-     * @return MailTransferContract
+     * @return MailTransferContractContractContract
      */
-    public function getMailTransferContract() : MailTransferContract
+    public function getMailTransferContract() : MailTransferContractContractContract
     {
         return $this->mailTransferContract;
     }
 
     /**
-     * @return MailProvider
+     * @return MailProviderContract
      */
-    public function getMailProvider() : MailProvider
+    public function getMailProviderContract() : MailProviderContract
     {
-        return $this->mailProvider;
+        return $this->mailProviderContract;
     }
 
     /**
@@ -50,7 +49,7 @@ class Sender implements SenderContract
         try {
             $mailTransfer = $this->getMailTransferContract();
 
-            $mailer = $this->getOfferMailerContract()->getMailer();
+            $mailer = $this->getMailProviderContract()->getMailer();
 
             $from = $mailTransfer->getFrom();
             $mailer->setFrom($from['address'], $from['name']);

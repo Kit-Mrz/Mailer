@@ -2,59 +2,59 @@
 
 namespace Mrzkit\Mailer\Contracts;
 
-interface MailSetter
+interface MailSetterContract
 {
     /**
      * @param array $from
-     * @return MailSetter
+     * @return MailSetterContract
      */
     public function setFrom(array $from);
 
     /**
      * @param array $recipients
-     * @return MailSetter
+     * @return MailSetterContract
      */
     public function setRecipients(array $recipients);
 
     /**
      * @param array $replyTo
-     * @return MailSetter
+     * @return MailSetterContract
      */
     public function setReplyTo(array $replyTo);
 
     /**
      * @param array $cc
-     * @return MailSetter
+     * @return MailSetterContract
      */
     public function setCc(array $cc);
 
     /**
      * @param array $bcc
-     * @return MailSetter
+     * @return MailSetterContract
      */
     public function setBcc(array $bcc);
 
     /**
      * @param string $subject
-     * @return MailSetter
+     * @return MailSetterContract
      */
     public function setSubject(string $subject);
 
     /**
      * @param string $body
-     * @return MailSetter
+     * @return MailSetterContract
      */
     public function setBody(string $body);
 
     /**
      * @param array $attachments
-     * @return MailSetter
+     * @return MailSetterContract
      */
     public function setAttachments(array $attachments);
 
     /**
      * @param bool $isHtml
-     * @return MailSetter
+     * @return MailSetterContract
      */
     public function setIsHtml(bool $isHtml);
 

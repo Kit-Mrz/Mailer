@@ -2,9 +2,9 @@
 
 namespace Mrzkit\Mailer;
 
-use Mrzkit\Mailer\Contracts\MailTransferContract;
+use Mrzkit\Mailer\Contracts\MailTransferContractContractContract;
 
-class MailTransfer implements MailTransferContract
+class MailTransfer implements MailTransferContractContractContract
 {
     /**
      * @var array 发送人 ['address' = '', 'name' => '']

@@ -2,13 +2,14 @@
 
 namespace Mrzkit\Mailer\Contracts;
 
+use Mrzkit\Mailer\DefaultMailConfig;
 use Mrzkit\Mailer\MailConnector;
 use Mrzkit\Mailer\Mailer;
 
-class DefaultMailProvider implements MailProvider
+class DefaultMailProvider implements MailProviderContract
 {
     public function getMailer() : Mailer
     {
-        return new Mailer(new MailConnector(config('mail.mailers.smtp')));
+        return new Mailer(new MailConnector(new DefaultMailConfig()));
     }
 }

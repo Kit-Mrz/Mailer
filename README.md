@@ -5,6 +5,7 @@
 ````PHP
 use Mrzkit\Mailer\MailTransfer;
 use Mrzkit\Mailer\Sender;
+use Mrzkit\Mailer\Contracts\DefaultMailProvider;
 
     $mailTransfer = new MailTransfer();
     $mailTransfer->setFrom($params['from'])

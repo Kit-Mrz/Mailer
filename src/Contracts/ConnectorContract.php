@@ -8,9 +8,9 @@ interface ConnectorContract
 {
     /**
      * @desc 获取配置
-     * @return array
+     * @return MailConfigContract
      */
-    public function getConfig() : array;
+    public function getMailConfigContract() : MailConfigContract;
 
     /**
      * @desc 获取邮件实例
