@@ -4,7 +4,7 @@ namespace Mrzkit\Mailer\Contracts;
 
 use Mrzkit\Mailer\Mailer;
 
-interface OfferMailerContract
+interface MailProvider
 {
     public function getMailer() : Mailer;
 }

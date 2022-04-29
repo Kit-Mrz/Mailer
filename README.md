@@ -16,9 +16,9 @@ use Mrzkit\Mailer\Sender;
         ->setBody()
         ->setAttachments($params['attachments'] ?? []);
         
-    $defaultOfferMailer = new DefaultOfferMailer();
+    $defaultMailProvider = new DefaultMailProvider();
 
-    $sender = new Sender($mailTransfer, $defaultOfferMailer);
+    $sender = new Sender($mailTransfer, $defaultMailProvider);
     
     $sender->send();
 ````

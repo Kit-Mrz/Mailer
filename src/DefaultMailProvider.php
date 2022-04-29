@@ -5,7 +5,7 @@ namespace Mrzkit\Mailer\Contracts;
 use Mrzkit\Mailer\MailConnector;
 use Mrzkit\Mailer\Mailer;
 
-class DefaultOfferMailer implements OfferMailerContract
+class DefaultMailProvider implements MailProvider
 {
     public function getMailer() : Mailer
     {
