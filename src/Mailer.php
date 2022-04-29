@@ -22,7 +22,7 @@ class Mailer
      * @desc 邮件实例
      * @return PHPMailer
      */
-    private function phpMailer() : PHPMailer
+    public function phpMailer() : PHPMailer
     {
         return $this->phpMailer;
     }

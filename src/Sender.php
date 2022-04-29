@@ -3,6 +3,7 @@
 namespace Mrzkit\Mailer;
 
 use Mrzkit\Mailer\Contracts\MailTransferContract;
+use Mrzkit\Mailer\Contracts\OfferMailerContract;
 use Mrzkit\Mailer\Contracts\SenderContract;
 use Exception;
 
@@ -11,32 +12,30 @@ class Sender implements SenderContract
     /** @var MailTransferContract */
     private $mailTransferContract;
 
-    /** @var Mailer */
-    protected static $mailer;
+    /** @var OfferMailerContract OfferMailerContract */
+    private $offerMailerContract;
 
-    public function __construct(MailTransferContract $mailTransferContract)
+    public function __construct(MailTransferContract $mailTransferContract, OfferMailerContract $offerMailerContract)
     {
         $this->mailTransferContract = $mailTransferContract;
-    }
 
-    /**
-     * @desc Mailer
-     * @param bool $force
-     * @return Mailer
-     */
-    public function mailer() : Mailer
-    {
-        static::$mailer = new Mailer(new MailConnector());
-
-        return static::$mailer;
+        $this->offerMailerContract = $offerMailerContract;
     }
 
     /**
      * @return MailTransferContract
      */
-    private function getMailTransferContract() : MailTransferContract
+    public function getMailTransferContract() : MailTransferContract
     {
         return $this->mailTransferContract;
+    }
+
+    /**
+     * @return OfferMailerContract
+     */
+    public function getOfferMailerContract() : OfferMailerContract
+    {
+        return $this->offerMailerContract;
     }
 
     /**
@@ -49,7 +48,8 @@ class Sender implements SenderContract
     {
         try {
             $mailTransfer = $this->getMailTransferContract();
-            $mailer       = $this->mailer();
+
+            $mailer = $this->getOfferMailerContract()->getMailer();
 
             $from = $mailTransfer->getFrom();
             $mailer->setFrom($from['address'], $from['name']);

@@ -16,24 +16,7 @@ class MailConnector implements ConnectorContract
     /**
      * @var array
      */
-    protected $config = [
-        // 便于开启调试信息
-        'debug'         => false,
-        'isSMTP'        => true, //Send using SMTP
-        'SMTPAuth'      => true, //Enable SMTP authentication
-        'SMTPSecure'    => PHPMailer::ENCRYPTION_SMTPS,
-        'SMTPAutoTLS'   => false,  // Disable Auto TLS authentication
-        'CharSet'       => PHPMailer::CHARSET_UTF8,
-        'SMTPKeepAlive' => true,
-
-        'host'     => '', // Specify main and backup SMTP servers
-        'port'     => 465, // TCP port to connect to
-        'username' => '', // SMTP username
-        'password' => '',  // SMTP password
-        'timeout'  => 20, // 超时设为20秒
-
-        'exceptions' => true, //Create an instance; passing `true` enables exceptions
-    ];
+    protected $config = [];
 
     public function __construct(array $config = [])
     {
@@ -58,14 +41,24 @@ class MailConnector implements ConnectorContract
      */
     private function setConfig(array $config)
     {
-        $this->config['debug']         = (bool) $config['debug'];
-        $this->config['host']          = (string) $config['host'];
-        $this->config['port']          = (int) $config['port'];
-        $this->config['username']      = (string) $config['username'];
-        $this->config['password']      = (string) $config['password'];
-        $this->config['timeout']       = (int) $config['timeout'];
-        $this->config['encryption']    = (bool) $config['encryption'];
-        $this->config['SMTPKeepAlive'] = (bool) ($config['SMTPKeepAlive'] ?? true);
+        $config = [
+            // 便于开启调试信息
+            'debug'         => (bool) ($config['debug'] ?? false),
+            'exceptions'    => (bool) ($config['exceptions'] ?? true), //Create an instance; passing `true` enables exceptions
+            'SMTPAuth'      => (bool) ($config['SMTPAuth'] ?? true), //Enable SMTP authentication
+            'SMTPSecure'    => (string) ($config['SMTPSecure'] ?? PHPMailer::ENCRYPTION_SMTPS),
+            'SMTPAutoTLS'   => (bool) ($config['SMTPAutoTLS'] ?? false),  // Disable Auto TLS authentication
+            'SMTPKeepAlive' => (bool) ($config['SMTPKeepAlive'] ?? true),
+            'CharSet'       => (string) ($config['CharSet'] ?? PHPMailer::CHARSET_UTF8),
+
+            'host'     => (string) ($config['host'] ?? ""), // Specify main and backup SMTP servers
+            'port'     => (int) ($config['port'] ?? 465), // TCP port to connect to
+            'username' => (string) ($config['username'] ?? ""), // SMTP username
+            'password' => (string) ($config['password'] ?? ""),  // SMTP password
+            'timeout'  => (string) ($config['timeout'] ?? 20), // 超时设为20秒
+        ];
+
+        $this->config = $config;
 
         return $this;
     }
@@ -81,18 +74,17 @@ class MailConnector implements ConnectorContract
         $mail = new PHPMailer($config['exceptions']);
 
         //Server settings
-        $config['isSMTP'] ? $mail->isSMTP() : $mail->isMail();
         $mail->SMTPDebug     = $config['debug'] ? SMTP::DEBUG_LOWLEVEL : SMTP::DEBUG_OFF;
         $mail->SMTPAuth      = $config['SMTPAuth'];
         $mail->SMTPSecure    = $config['SMTPSecure'];
         $mail->SMTPAutoTLS   = $config['SMTPAutoTLS'];
         $mail->SMTPKeepAlive = $config['SMTPKeepAlive'] ?? true;
+        $mail->CharSet       = $config['CharSet'];
         $mail->Host          = $config['host'];
+        $mail->Port          = $config['port'];
         $mail->Username      = $config['username'];
         $mail->Password      = $config['password'];
-        $mail->Port          = $config['port'];
         $mail->Timeout       = $config['timeout'];
-        $mail->CharSet       = $config['CharSet'];
 
         $this->phpMailer = $mail;
 
