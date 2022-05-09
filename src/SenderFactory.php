@@ -7,6 +7,14 @@ use Mrzkit\Mailer\Contracts\MailTransferContractContractContract;
 
 class SenderFactory
 {
+    /**
+     * @desc
+     * @param MailTransferContractContractContract $mailTransferContract
+     * @param MailConfigContract $mailConfigContract
+     * @return bool
+     * @throws SenderException
+     * @throws \PHPMailer\PHPMailer\Exception
+     */
     public static function sender(MailTransferContractContractContract $mailTransferContract, MailConfigContract $mailConfigContract) : bool
     {
         $mailProvider = new MailProvider($mailConfigContract);
@@ -16,6 +24,13 @@ class SenderFactory
         return $sender->send();
     }
 
+    /**
+     * @desc
+     * @param array $params
+     * @return bool
+     * @throws SenderException
+     * @throws \PHPMailer\PHPMailer\Exception
+     */
     public static function send(array $params) : bool
     {
         $mailTransfer = new MailTransfer();
