@@ -366,12 +366,16 @@ class TranslateSmtpErrorInfo
             return $email . '队列文件写入错误，可能是由于邮件内容过大';
         }
 
-        if (strpos($errorInfo, 'Error: need RCPT command') !== false) {
+        if (strpos($errorInfo, 'need RCPT command') !== false) {
             return $email . '收件人地址异常';
         }
 
-        if ($errorInfo == 'SMTP Error: data not accepted.SMTP server error: DATA END command failed') {
-            return $email . 'SMTP 数据不被接受';
+        if (strpos($errorInfo, 'Could not authenticate') !== false) {
+            return $email . '无法认证，建议检查账号密码是否正确，以及是否设置了双重密码';
+        }
+
+        if (strpos($errorInfo, 'data not accepted.SMTP server error: DATA END command failed') !== false) {
+            return $email . '数据不被接受';
         }
 
         return $errorInfo;
