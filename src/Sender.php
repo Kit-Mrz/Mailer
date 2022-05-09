@@ -3,19 +3,19 @@
 namespace Mrzkit\Mailer;
 
 use Mrzkit\Mailer\Contracts\MailProviderContract;
-use Mrzkit\Mailer\Contracts\MailTransferContractContractContract;
+use Mrzkit\Mailer\Contracts\MailTransferContract;
 use Mrzkit\Mailer\Contracts\SenderContract;
 use Exception;
 
 class Sender implements SenderContract
 {
-    /** @var MailTransferContractContractContract */
+    /** @var MailTransferContract */
     private $mailTransferContract;
 
     /** @var MailProviderContract */
     private $mailProviderContract;
 
-    public function __construct(MailTransferContractContractContract $mailTransferContract, MailProviderContract $mailProviderContract)
+    public function __construct(MailTransferContract $mailTransferContract, MailProviderContract $mailProviderContract)
     {
         $this->mailTransferContract = $mailTransferContract;
 
@@ -23,9 +23,9 @@ class Sender implements SenderContract
     }
 
     /**
-     * @return MailTransferContractContractContract
+     * @return MailTransferContract
      */
-    public function getMailTransferContract() : MailTransferContractContractContract
+    public function getMailTransferContract() : MailTransferContract
     {
         return $this->mailTransferContract;
     }

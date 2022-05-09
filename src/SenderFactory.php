@@ -3,19 +3,19 @@
 namespace Mrzkit\Mailer;
 
 use Mrzkit\Mailer\Contracts\MailConfigContract;
-use Mrzkit\Mailer\Contracts\MailTransferContractContractContract;
+use Mrzkit\Mailer\Contracts\MailTransferContract;
 
 class SenderFactory
 {
     /**
      * @desc
-     * @param MailTransferContractContractContract $mailTransferContract
+     * @param MailTransferContract $mailTransferContract
      * @param MailConfigContract $mailConfigContract
      * @return bool
      * @throws SenderException
      * @throws \PHPMailer\PHPMailer\Exception
      */
-    public static function sender(MailTransferContractContractContract $mailTransferContract, MailConfigContract $mailConfigContract) : bool
+    public static function sender(MailTransferContract $mailTransferContract, MailConfigContract $mailConfigContract) : bool
     {
         $mailProvider = new MailProvider($mailConfigContract);
 
