@@ -383,7 +383,7 @@ class TranslateSmtpErrorInfo
         }
 
         if (strpos($errorInfo, 'data not accepted') !== false) {
-            return $email . '数据不接受，请确保已经开启了 SMTP 服务';
+            return $email . '数据不接受，请确保已经开启了 SMTP 邮件服务';
         }
 
         return $errorInfo;
