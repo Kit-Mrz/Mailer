@@ -378,6 +378,10 @@ class TranslateSmtpErrorInfo
             return $email . '数据不被接受';
         }
 
+        if (strpos($errorInfo, 'Invalid address') !== false) {
+            return $email . '失效的邮箱地址';
+        }
+
         return $errorInfo;
     }
 }
