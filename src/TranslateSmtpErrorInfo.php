@@ -382,6 +382,10 @@ class TranslateSmtpErrorInfo
             return $email . '失效的邮箱地址';
         }
 
+        if (strpos($errorInfo, 'data not accepted') !== false) {
+            return $email . '数据不接受，请确保已经开启了 SMTP 服务';
+        }
+
         return $errorInfo;
     }
 }
